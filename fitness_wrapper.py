@@ -35,11 +35,12 @@ def fitness_wrapper(trainingData, trainingLabels, testingData, testingLabels, in
 	
 A = numpy.matrix('1,1,4;2,3,5;3,42,6')
 #print(numpy.size(A,1))
-B = numpy.matrix('1,1,0')
+B = numpy.matrix('1,1,-1')
 C = numpy.matrix('8,8,8;7,7,7;6,6,6')
-D = 1
+D = numpy.matrix("1,1,1")
 individual = numpy.matrix('1,1,0')
 A = numpy.matrix.transpose(A)
 B = numpy.matrix.transpose(B)
 C = numpy.matrix.transpose(C)
+#D = numpy.matrix.transpose(D)
 fitness_wrapper(A,B,C,D,individual)
