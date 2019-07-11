@@ -12,8 +12,9 @@ def fitness(testingData, w, b, testingLabels):
     #for each datapoint in testing set (each column, IGNORING the label)
     #wt = numpy.matrix.transpose(w)
 
-    Ytest = numpy.matrix.transpose(w)*T + b
+    Ytest = numpy.matrix.transpose(w)*testingData + b
     #based on closeness of the two classes (0 or 1) sort
+    print(Ytest)
 
     for i in range(len(Ytest)):
         print(i)
