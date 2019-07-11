@@ -4,8 +4,12 @@ import fitness
 import regression
 
 #takes datasets formatted as each column is a data point, each row is a feature
-def fitness_wrapper(trainingData, trainingLabels, testingData, testingLabels, individual):
-		
+def fitness_wrapper(oTrainingData, oTrainingLabels, oTestingData, testingLabels, individual):
+	
+	trainingData = numpy.matrix.transpose(oTrainingData)
+	trainingLabels = numpy.matrix.transpose(oTrainingLabels)
+	testingData  = numpy.matrix.transpose(oTestingData)
+	
 	#design decision - make use range of length for future flexibility
 	fData = None
 	tData = None
@@ -32,15 +36,15 @@ def fitness_wrapper(trainingData, trainingLabels, testingData, testingLabels, in
 	#call fitness function on w and b values
 	fitness_result = fitness.fitness(tData, w, b,testingLabels)
 	
-	
+#for testing purposes	
 A = numpy.matrix('1,1,4;2,3,5;3,42,6')
 #print(numpy.size(A,1))
 B = numpy.matrix('1,1,-1')
 C = numpy.matrix('8,8,8;7,7,7;6,6,6')
 D = numpy.matrix("1,1,1")
 individual = numpy.matrix('1,1,0')
-A = numpy.matrix.transpose(A)
-B = numpy.matrix.transpose(B)
-C = numpy.matrix.transpose(C)
+#A = numpy.matrix.transpose(A)
+#B = numpy.matrix.transpose(B)
+#C = numpy.matrix.transpose(C)
 #D = numpy.matrix.transpose(D)
 fitness_wrapper(A,B,C,D,individual)
