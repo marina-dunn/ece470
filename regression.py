@@ -46,3 +46,4 @@ def regression (trainingSet, trainingLabels):
     print('w* and b*')
     print(w)
     print(b)
+    return w, b

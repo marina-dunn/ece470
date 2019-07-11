@@ -25,6 +25,7 @@ def fitness(testingData, w, b, testingLabels):
     print (Ytest)
 
     #misclassifications - result of fitness function
-    result = Y - Ytest
+    result = testingLabels - Ytest
 
     print(result)
+    return result
