@@ -13,7 +13,7 @@ def fitness(testingData, w, b, testingLabels):
     #wt = numpy.matrix.transpose(w)
     # print('below is w :::::::::::::')
     # print(w)
-    Ytest = numpy.matrix.transpose(w)*testingData +b
+    Ytest = (numpy.matrix.transpose(w) @ testingData) +b
     #based on closeness of the two classes (0 or 1) sort
     # print(Ytest)
     # print("testing labels")
@@ -36,5 +36,5 @@ def fitness(testingData, w, b, testingLabels):
     for element in range(numpy.size(result,1)):
         if element !=0:
             error = error +1
-        
+
     return error

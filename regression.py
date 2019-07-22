@@ -8,7 +8,7 @@ def regression (trainingSet, trainingLabels):
     #F = numpy.matrix('-2, -1, 0, 1, 2; 2, 3, 4, 2, 1')
     #y = numpy.matrix('-1; 0; 2; 2; 4')
 
-    print("trainginnset")
+    print("trainingset")
     print(trainingSet)
     # print("traing labels")
     # print(trainingLabels)
@@ -27,25 +27,31 @@ def regression (trainingSet, trainingLabels):
 
     X = numpy.matrix.transpose(Xt)
 
-    XtX = numpy.matmul(Xt, X)
+    XtX = Xt @ X
 
-    # print("Xt*X")
+    #print("Xt*X size:")
+    #xtn,xtm = XtX.shape
+    #print(xtn, " x ", xtm)
     # print(XtX)
 
     inv = numpy.linalg.inv(XtX)
 
-    Xty = Xt*trainingLabels
+    #THE GOLD STANDARD FOR MATRIX MULTIPLICATION
+    Xty = Xt @ trainingLabels
     # print("Xt*y")
     # print(Xty)
+    #print("y size:")
+    #xtyn,xtym = trainingLabels.shape
+    #print(xtyn, " x ", xtym)
 
-    W = numpy.matmul(inv, Xty)
+    W = inv @ Xty
 
     #debug purposes
-    print('W')
-    print(W)
+    #print('W')
+    #print(W)
 
     w = W[0:n]
-    
+
     b = W[n]
     #print('w* and b*')
     #print(w)

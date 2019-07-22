@@ -5,38 +5,42 @@ import regression
 
 #takes datasets formatted as each column is a data point, each row is a feature
 def fitness_wrapper(oTrainingData, oTrainingLabels, oTestingData, testingLabels, individual):
-	
+
 	trainingData = numpy.matrix.transpose(oTrainingData)
-	trainingLabels = numpy.matrix.transpose(oTrainingLabels)
+	#Y would be transposed twice, so skip it here
+	#trainingLabels = numpy.matrix.transpose(oTrainingLabels)
+	trainingLabels = oTrainingLabels
 	testingData  = numpy.matrix.transpose(oTestingData)
-	
+
 	#design decision - make use range of length for future flexibility
 	fData = None
 	tData = None
 	#print(numpy.size(individual,1))
-	
+
 	for gene_position in range(numpy.size(individual,1)):
 		#print(gene_position)
 		if individual[0,gene_position] == 1:
-			if fData == None:
+			if fData is None:
 				fData = trainingData[gene_position]
 				tData = testingData[gene_position]
 			else:
 				fData = numpy.vstack((fData, trainingData[gene_position]))
 				tData = numpy.vstack((tData, testingData[gene_position]))
-		
+
 	# print("fData:")
 	# print(fData)
 	# print("tData:")
 	# print(tData)
-	
+
 	#call regression on new data
 	w,b = regression.regression(fData, trainingLabels)
-	
+	wn,wm = w.shape
+	print(" w is ", wn, " x ", wm)
+
 	#call fitness function on w and b values
 	fitness_result = fitness.fitness(tData, w, b,testingLabels)
-	
-#for testing purposes	
+
+#for testing purposes
 # A = numpy.matrix('1,1,4;2,3,5;3,42,6')
 # #print(numpy.size(A,1))
 # B = numpy.matrix('1,1,-1')
