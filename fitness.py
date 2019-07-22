@@ -11,26 +11,27 @@ def fitness(testingData, w, b, testingLabels):
 
     #for each datapoint in testing set (each column, IGNORING the label)
     #wt = numpy.matrix.transpose(w)
-
-    Ytest = numpy.matrix.transpose(w)*testingData + b
+    # print('below is w :::::::::::::')
+    # print(w)
+    Ytest = numpy.matrix.transpose(w)*testingData +b
     #based on closeness of the two classes (0 or 1) sort
-    print(Ytest)
-    print("testing labels")
-    print(testingLabels)
+    # print(Ytest)
+    # print("testing labels")
+    # print(testingLabels)
 
     for i in range(numpy.size(Ytest,1)):
-        print(i)
+        # print(i)
         if Ytest[0,i] >= 0:
             Ytest[0,i] = 1
         else:
             Ytest[0,i] = -1
 
-    print (Ytest)
+    # print (Ytest)
 
     #misclassifications - result of fitness function
     result = testingLabels - Ytest
 
-    print(result)
+    # print(result)
     error = 0
     for element in range(numpy.size(result,1)):
         if element !=0:

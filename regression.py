@@ -10,11 +10,11 @@ def regression (trainingSet, trainingLabels):
 
     print("trainginnset")
     print(trainingSet)
-    print("traing labels")
-    print(trainingLabels)
+    # print("traing labels")
+    # print(trainingLabels)
 
     n,m = trainingSet.shape
-
+    print(n)
     onesRow = numpy.ones((1,m))
 
     #print(onesRow)
@@ -27,23 +27,25 @@ def regression (trainingSet, trainingLabels):
 
     X = numpy.matrix.transpose(Xt)
 
-    XtX = Xt*X
+    XtX = numpy.matmul(Xt, X)
 
-    #print("Xt*X")
-    #print(XtX)
+    # print("Xt*X")
+    # print(XtX)
 
     inv = numpy.linalg.inv(XtX)
 
     Xty = Xt*trainingLabels
-    #print("Xt*y")
-    #print(Xty)
+    # print("Xt*y")
+    # print(Xty)
 
-    W = inv*Xty
+    W = numpy.matmul(inv, Xty)
 
     #debug purposes
-    #print(W)
+    print('W')
+    print(W)
 
     w = W[0:n]
+    
     b = W[n]
     #print('w* and b*')
     #print(w)

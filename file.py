@@ -1,5 +1,13 @@
 import csv
 import random
+import fitness_wrapper
+import numpy
+
+
+class Chromosome:
+    def __init__(self, binary, fit):
+        self.binary = binary
+        self.fit = fit
 
 def csvParser(filename):
     with open(filename)as csvfile:
@@ -42,17 +50,40 @@ def mutation(individual):
     return individual 
 
 def main():
-    res = csvParser('trainingdata.csv')
-    # This next part is the crossover fn
-    for val in range(len(res)):
-        if val != 0:
-            crossed1, crossed2 = crossover(res[val-1], res[val])
-            res[val-1] = crossed1
-            res[val] = crossed2
-    # This is where the mutation would go when we have it in the correct binary format
-    # here I am going to run it through the AI and ML 
-    test = csvParser('testingdata.csv')
-    # here I am going to run it through the AI and test the ML
+    traindata = numpy.asarray(csvParser('trainingdata.csv'), dtype=numpy.float32)
+    testdata = numpy.asarray(csvParser('testingdata.csv'), dtype=numpy.float32)
+    trainlabel = numpy.asarray(csvParser('traininglabels.csv'), dtype=numpy.float32)
+    testlabel = numpy.asarray(csvParser('testinglabels.csv'), dtype=numpy.float32)
+    # print(traindata)
+    matingpool = []
+    for q in range(4):
+        temp = []
+        temp2 = []
+        for bina in range(9):
+            temp.append(random.randint(0, 1))
+        temp2.append(temp)
+        individual = numpy.asarray(temp2, dtype=numpy.float32)
+        res = fitness_wrapper.fitness_wrapper(traindata, trainlabel, testdata, testlabel, individual)
+        tempchrom = Chromosome(temp2, res)
+        matingpool.append(tempchrom)
     
+    for j in range(510): # hard stop by iteration as back up for plateau
+        listtemp = []
+        # sort the mating pool and pick the two highest
+        par1 = matingpool[0][0]
+        par2 = matingpool[1][0]
+        # run the parents through the GA to get the children
+        chi1, chi2 = crossover(par1, par2)
+        chi1 = mutation(chi1)
+        listtemp.append(chi1)
+        individual = numpy.asarray(listtemp, dtype=numpy.float32)
+        res1 = fitness_wrapper.fitness_wrapper(traindata, trainlabel, testdata, testlabel, individual)
+        listtemp = []
+        chi2 = mutation(chi2)
+        listtemp.append(chi2)
+        individual = numpy.asarray(listtemp, dtype=numpy.float32)
+        res2 = fitness_wrapper.fitness_wrapper(traindata, trainlabel, testdata, testlabel, individual)
+        ch1 = Chromosome()
+            
 if __name__ == "__main__":
     main()
