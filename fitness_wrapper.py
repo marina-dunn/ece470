@@ -1,24 +1,22 @@
 import numpy
-
+# importing local files:
 import fitness
 import regression
 
-#takes datasets formatted as each column is a data point, each row is a feature
+#takes datasets formatted having each column as a data point, each row as a feature
 def fitness_wrapper(oTrainingData, oTrainingLabels, oTestingData, testingLabels, individual):
-
+	# transposing the data to have the samples become columns and the features become rows
 	trainingData = numpy.matrix.transpose(oTrainingData)
-	#Y would be transposed twice, so skip it here
-	#trainingLabels = numpy.matrix.transpose(oTrainingLabels)
 	trainingLabels = oTrainingLabels
 	testingData  = numpy.matrix.transpose(oTestingData)
 
 	#design decision - make use range of length for future flexibility
 	fData = None
 	tData = None
-	#print(numpy.size(individual,1))
 
+	# this cycles through the given individual(binary encoding)
+	# and only includes the features that are designated by the individual
 	for gene_position in range(numpy.size(individual,1)):
-		#print(gene_position)
 		if individual[0,gene_position] == 1:
 			if fData is None:
 				fData = trainingData[gene_position]
@@ -27,32 +25,9 @@ def fitness_wrapper(oTrainingData, oTrainingLabels, oTestingData, testingLabels,
 				fData = numpy.vstack((fData, trainingData[gene_position]))
 				tData = numpy.vstack((tData, testingData[gene_position]))
 
-	# print("fData:")
-	# print(fData)
-	# print("tData:")
-	# print(tData)
-
-	#call regression on new data
+	#call regression on new data to get the optimal classification values
 	w,b = regression.regression(fData, trainingLabels)
-	#wn,wm = w.shape
-	# print(" w is ", wn, " x ", wm)
 
-	#call fitness function on w and b values
+	#call fitness function to evaluate optimal classification values
 	fitness_result = fitness.fitness(tData, w, b,testingLabels)
-	#print('w and resulting fitness')
-	#print(w)
-	#print(fitness_result)
 	return fitness_result
-
-#for testing purposes
-# A = numpy.matrix('1,1,4;2,3,5;3,42,6')
-# #print(numpy.size(A,1))
-# B = numpy.matrix('1,1,-1')
-# C = numpy.matrix('8,8,8;7,7,7;6,6,6')
-# D = numpy.matrix("1,1,1")
-# individual = numpy.matrix('1,1,0')
-# #A = numpy.matrix.transpose(A)
-# #B = numpy.matrix.transpose(B)
-# #C = numpy.matrix.transpose(C)
-# #D = numpy.matrix.transpose(D)
-# fitness_wrapper(A,B,C,D,individual)

@@ -3,6 +3,7 @@ import random
 import fitness_wrapper
 import numpy
 
+# this is an object that is used to associate the binary encodings and fitness values
 class Chromosome:
     def __init__(self, binary, fit):
         self.binary = binary
@@ -11,6 +12,7 @@ class Chromosome:
     def __repr__(self):
         return repr((self.binary, self.fit))
 
+# this parses the csv files
 def csvParser(filename):
     with open(filename)as csvfile:
         csv_reader = csv.reader(csvfile, delimiter=',')
@@ -27,9 +29,8 @@ def csvParser(filename):
                 vals.append(temp)
         return vals
 
+# This function takes in two parents and exchanges random values within them to crossover
 def crossover(parent1, parent2):
-    # TODO: make this more efficient (less variables)
-    # This function takes in two parents and exchanges random values within them
     len1 = len(parent1)
     len2 = len(parent2)
     rand1 = random.randrange(len1)
@@ -41,8 +42,8 @@ def crossover(parent1, parent2):
     cross2[rand2] = temp
     return cross1, cross2
 
+# In here we are taking in an individual and applying the flip bit mutation
 def mutation(individual):
-    # In here we are taking in an individual and applying the flip bit mutation
     rand = random.randrange(len(individual))
     val = individual[rand]
     if val == 0:
@@ -51,12 +52,14 @@ def mutation(individual):
         individual[rand] = 0
     return individual
 
+# creates a randomized binary encoding
 def makeRandom(n):
     temp = []
     for bina in range(n):
         temp.append(random.randint(0, 1))
     return temp
 
+# checking if the binary encoding includes none of the features or only one
 def checkZeros(binary):
     valid = 0
     for val in binary:
@@ -68,10 +71,13 @@ def checkZeros(binary):
         return checkZeros(makeRandom(9))
 
 def checkPlateau(fit, plateauarr):
-    if len(plateauarr) >= 100:
+    # checks for a plateau of 50 or more of the same fitness values
+    if len(plateauarr) >= 50:
         return None
+    # adds the newest fitness value to the plateau array if it's the same
     elif plateauarr[-1] == fit:
         plateauarr.append(fit)
+    # empties the array and starts a new counter if there is a new fitness value that would not be condusive to a 
     elif plateauarr[-1] != fit:
         plateauarr = [fit]
     return plateauarr
@@ -128,10 +134,11 @@ def main():
         # add children to mating pool - sort mating pool and remove two worst performing individuals
         matingpool.append(ch1)
         matingpool.append(ch2)
-        sorted(matingpool, key=lambda x: x.fit)
+        matingpool.sort(key=lambda x: x.fit)
         matingpool.pop()
         matingpool.pop()
 
+    # prints out the results
     print('The binary encoding is: ')
     print(matingpool[0].binary[0])
     print(' , the fitness result is: ')
