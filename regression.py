@@ -8,13 +8,13 @@ def regression (trainingSet, trainingLabels):
     #F = numpy.matrix('-2, -1, 0, 1, 2; 2, 3, 4, 2, 1')
     #y = numpy.matrix('-1; 0; 2; 2; 4')
 
-    print("trainingset")
-    print(trainingSet)
+    # print("trainingset")
+    # print(trainingSet)
     # print("traing labels")
     # print(trainingLabels)
 
     n,m = trainingSet.shape
-    print(n)
+    # print(n)
     onesRow = numpy.ones((1,m))
 
     #print(onesRow)

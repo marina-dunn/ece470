@@ -35,10 +35,11 @@ def fitness_wrapper(oTrainingData, oTrainingLabels, oTestingData, testingLabels,
 	#call regression on new data
 	w,b = regression.regression(fData, trainingLabels)
 	wn,wm = w.shape
-	print(" w is ", wn, " x ", wm)
+	# print(" w is ", wn, " x ", wm)
 
 	#call fitness function on w and b values
 	fitness_result = fitness.fitness(tData, w, b,testingLabels)
+	return fitness_result
 
 #for testing purposes
 # A = numpy.matrix('1,1,4;2,3,5;3,42,6')

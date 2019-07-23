@@ -3,11 +3,13 @@ import random
 import fitness_wrapper
 import numpy
 
-
 class Chromosome:
     def __init__(self, binary, fit):
         self.binary = binary
         self.fit = fit
+
+    def __repr__(self):
+        return repr((self.binary, self.fit))
 
 def csvParser(filename):
     with open(filename)as csvfile:
@@ -49,41 +51,93 @@ def mutation(individual):
         individual[rand] = 0
     return individual 
 
+def makeRandom(n):
+    temp = []
+    for bina in range(n):
+        temp.append(random.randint(0, 1))
+    return temp
+    
+def checkZeros(binary):
+    valid = 0
+    for val in binary:
+        if(val == 1):
+            valid += 1
+    if valid > 1:
+        return binary
+    else:
+        return checkZeros(makeRandom(9))
+
+def checkPlateau(fit, plateauarr):
+    if len(plateauarr) >= 100:
+        return None
+    elif plateauarr[-1] == fit:
+        plateauarr.append(fit)
+    elif plateauarr[-1] != fit:
+        plateauarr = [fit]
+    return plateauarr
+    
 def main():
+    # parse all of the csv files to pass to the fitness function
     traindata = numpy.asarray(csvParser('trainingdata.csv'), dtype=numpy.float32)
     testdata = numpy.asarray(csvParser('testingdata.csv'), dtype=numpy.float32)
     trainlabel = numpy.asarray(csvParser('traininglabels.csv'), dtype=numpy.float32)
     testlabel = numpy.asarray(csvParser('testinglabels.csv'), dtype=numpy.float32)
-    # print(traindata)
     matingpool = []
+    plateauarr = []
+
+    # start out with 4 random individuals in mating pool
+    # each individual is a binary encoding that decides which of the features is being included
     for q in range(4):
-        temp = []
+        temp = checkZeros(makeRandom(9))
         temp2 = []
-        for bina in range(9):
-            temp.append(random.randint(0, 1))
         temp2.append(temp)
         individual = numpy.asarray(temp2, dtype=numpy.float32)
         res = fitness_wrapper.fitness_wrapper(traindata, trainlabel, testdata, testlabel, individual)
+        plateauarr.append(res)
         tempchrom = Chromosome(temp2, res)
         matingpool.append(tempchrom)
-    
+
     for j in range(510): # hard stop by iteration as back up for plateau
         listtemp = []
         # sort the mating pool and pick the two highest
-        par1 = matingpool[0][0]
-        par2 = matingpool[1][0]
-        # run the parents through the GA to get the children
+        par1 = matingpool[0].binary[0]
+        par2 = matingpool[1].binary[0]
+        # run the parents through the GA to get two children
         chi1, chi2 = crossover(par1, par2)
-        chi1 = mutation(chi1)
+        chi1 = checkZeros(mutation(chi1))
         listtemp.append(chi1)
         individual = numpy.asarray(listtemp, dtype=numpy.float32)
+        # get fitness of first child
         res1 = fitness_wrapper.fitness_wrapper(traindata, trainlabel, testdata, testlabel, individual)
+        # check plateau after first child
+        plateauarr = checkPlateau(res1, plateauarr)
+        if plateauarr is None:
+            break
+        ch1 = Chromosome(listtemp, res1)
         listtemp = []
-        chi2 = mutation(chi2)
+        chi2 = checkZeros(mutation(chi2))
         listtemp.append(chi2)
         individual = numpy.asarray(listtemp, dtype=numpy.float32)
+        # get fitness of second child
         res2 = fitness_wrapper.fitness_wrapper(traindata, trainlabel, testdata, testlabel, individual)
-        ch1 = Chromosome()
-            
+        # check plateau after second child
+        plateauarr = checkPlateau(res2, plateauarr)
+        if plateauarr is None:
+            break
+        ch2 = Chromosome(listtemp, res2)
+        # add children to mating pool - sort mating pool and remove two worst performing individuals
+        matingpool.append(ch1)
+        matingpool.append(ch2)
+        sorted(matingpool, key=lambda x: x.fit)
+        matingpool.pop()
+        matingpool.pop()
+          
+    print('The binary encoding is: ')
+    print(matingpool[0].binary[0])
+    print(' , the fitness result is: ')
+    print(matingpool[0].fit)
+    print(' and the iteration was: ')
+    print(j)
+    
 if __name__ == "__main__":
     main()
