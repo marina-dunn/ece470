@@ -49,14 +49,14 @@ def mutation(individual):
         individual[rand] = 1
     else:
         individual[rand] = 0
-    return individual 
+    return individual
 
 def makeRandom(n):
     temp = []
     for bina in range(n):
         temp.append(random.randint(0, 1))
     return temp
-    
+
 def checkZeros(binary):
     valid = 0
     for val in binary:
@@ -75,7 +75,7 @@ def checkPlateau(fit, plateauarr):
     elif plateauarr[-1] != fit:
         plateauarr = [fit]
     return plateauarr
-    
+
 def main():
     # parse all of the csv files to pass to the fitness function
     traindata = numpy.asarray(csvParser('trainingdata.csv'), dtype=numpy.float32)
@@ -131,13 +131,13 @@ def main():
         sorted(matingpool, key=lambda x: x.fit)
         matingpool.pop()
         matingpool.pop()
-          
+
     print('The binary encoding is: ')
     print(matingpool[0].binary[0])
     print(' , the fitness result is: ')
     print(matingpool[0].fit)
     print(' and the iteration was: ')
     print(j)
-    
+
 if __name__ == "__main__":
     main()

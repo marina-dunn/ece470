@@ -34,11 +34,14 @@ def fitness_wrapper(oTrainingData, oTrainingLabels, oTestingData, testingLabels,
 
 	#call regression on new data
 	w,b = regression.regression(fData, trainingLabels)
-	wn,wm = w.shape
+	#wn,wm = w.shape
 	# print(" w is ", wn, " x ", wm)
 
 	#call fitness function on w and b values
 	fitness_result = fitness.fitness(tData, w, b,testingLabels)
+	#print('w and resulting fitness')
+	#print(w)
+	#print(fitness_result)
 	return fitness_result
 
 #for testing purposes
