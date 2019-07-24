@@ -72,7 +72,7 @@ def checkZeros(binary):
 
 def checkPlateau(fit, plateauarr):
     # checks for a plateau of 50 or more of the same fitness values
-    if len(plateauarr) >= 50:
+    if len(plateauarr) >= 5:
         return None
     # adds the newest fitness value to the plateau array if it's the same
     elif plateauarr[-1] == fit:
@@ -106,8 +106,8 @@ def main():
     for j in range(510): # hard stop by iteration as back up for plateau
         listtemp = []
         # sort the mating pool and pick the two highest
-        par1 = matingpool[0].binary[0]
-        par2 = matingpool[1].binary[0]
+        par1 = matingpool[0].binary[:]
+        par2 = matingpool[1].binary[:]
         # run the parents through the GA to get two children
         chi1, chi2 = crossover(par1, par2)
         chi1 = checkZeros(mutation(chi1))

@@ -18,6 +18,5 @@ def fitness(testingData, w, b, testingLabels):
     # misclassifications - result of fitness function plus number of features needed
     result = (testingLabels - Ytest)
     error = numpy.count_nonzero(result)
-    error = error + n
-
+    error = error + 0.01*n
     return error
